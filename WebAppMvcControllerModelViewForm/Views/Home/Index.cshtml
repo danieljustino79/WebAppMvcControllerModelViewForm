@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+                <h2>@ViewBag.Message</h2>
+            </hgroup>
+            <p>
+                Obs: before of work with options advantages in applications .NET MVC, we have to have a database available. <br />
+                Add Database.mdf in App_Data directory, through Data -> Sql Server Database<br />
+                After adding this item, it will be available on the tab Server Explorer, node Data Connections. 
+                This item simulate one database, ready to connection with the application.
+            </p>
+        </div>
+    </section>
+}
+<h3>We suggest the following:</h3>
+<ol class="round">
+    <li >@Html.ActionLink("Database to Model", "DatabaseToModel")
+    </li>
+
+    <li >@Html.ActionLink("Controller passing Model to View", "ControllerPassingModelToView")
+    </li>
+
+    <li>@Html.ActionLink("Form scaffold validation and label", "FormScaffoldValidationLabel")
+    </li>
+
+    <li>
+        @Html.ActionLink("Validation Integrated Razor", "ValidationIntegratedRazor")
+</li>
+
+    <li>@Html.ActionLink("EntityFramework Model", "EntityFrameworkModel")
+    </li>
+    <li>
+        @Html.ActionLink("EntityFramework Operations", "Index", "Log")
+</li>
+</ol>

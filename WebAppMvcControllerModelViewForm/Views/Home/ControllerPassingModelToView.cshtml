@@ -1,0 +1,64 @@
+﻿@model WebAppMvcControllerModelViewForm.Models.Log
+
+@{
+    ViewBag.Title = "ControllerPassingModelToView";
+}
+
+<h2>Controller Passing Model To View</h2>
+<h3>Controller</h3>
+<b>Object</b>
+<pre>Log log = new Log();
+log.Id = 1;
+log.Name = "Sam";
+log.Date = DateTime.Now;
+log.Priority = 1;
+
+return View(log);
+</pre>
+<b>List</b>
+<pre>Log log = new Log();
+log.Id = 1;
+log.Name = "Sam";
+log.Date = DateTime.Now;
+log.Priority = 1;
+
+List&lt;log&gt; list = new List&lt;log&gt;();
+list.Add(log);
+
+return View(list);</pre>
+<div style="clear:both"></div>
+<hr />
+<h3>Views</h3>
+<img src="~/Images/view%20scaffold.png" style="float:right" />
+<p>Add View</p>
+<p>ControllerPassingModelToView.cshtml<br /> Create a strongly-typed view<br />Model class: Log<br />Scaffold template: <b>Empty</b></p>
+
+<hr />
+<p>Scaffold template: <b>List</b></p>
+<pre>@@model IEnumerable&lt;WebAppMvcControllerModelViewForm.Models.Log&gt;
+...
+&lt;table&gt;
+&lt;tr&gt;&lt;th&gt;@@Html.DisplayNameFor(model =&gt; model.Name)&lt;/th&gt;
+    &lt;th&gt;@@Html.DisplayNameFor(model =&gt; model.Date)&lt;/th&gt;
+    &lt;th&gt;@@Html.DisplayNameFor(model =&gt; model.Priority)&lt;/th&gt;
+&lt;/tr&gt;
+    @@foreach (var item in Model) {
+&lt;tr&gt;&lt;td&gt;@@Html.DisplayFor(modelItem =&gt; item.Name)&lt;/td&gt;
+    &lt;td&gt;@@Html.DisplayFor(modelItem =&gt; item.Date)&lt;/td&gt;
+    &lt;td&gt;@@Html.DisplayFor(modelItem =&gt; item.Priority)&lt;/td&gt;
+&lt;/tr&gt;
+    }
+&lt;/table&gt;</pre>
+<hr />
+<p>Scaffold template: <b>Details</b></p>
+<pre>@@model WebAppMvcControllerModelViewForm.Models.Log
+...
+&lt;fieldset&gt;
+&lt;legend&gt;Log&lt;/legend&gt;
+&lt;div class="display-label"&gt;@@Html.DisplayNameFor(model =&gt; model.Name)&lt;/div&gt;
+&lt;div class="display-field"&gt;@@Html.DisplayFor(model =&gt; model.Name)&lt;/div&gt;
+&lt;div class="display-label"&gt;@@Html.DisplayNameFor(model =&gt; model.Date)&lt;/div&gt;
+&lt;div class="display-field"&gt;@@Html.DisplayFor(model =&gt; model.Date)&lt;/div&gt;
+&lt;div class="display-label"&gt;@@Html.DisplayNameFor(model =&gt; model.Priority)&lt;/div&gt;
+&lt;div class="display-field"&gt;@@Html.DisplayFor(model =&gt; model.Priority)&lt;/div&gt;
+&lt;/fieldset&gt;</pre>

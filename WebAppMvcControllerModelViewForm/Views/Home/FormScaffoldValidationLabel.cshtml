@@ -1,0 +1,125 @@
+﻿@model WebAppMvcControllerModelViewForm.Models.Log
+
+@{
+    ViewBag.Title = "FormScaffoldValidationLabel";
+}
+
+<h2>Form Scaffold Validation and Label</h2>
+
+<p>Add View<br /> Create a strongly-typed view<br />Model class: Log<br />Scaffold template: <b>Create</b><br />
+Reference script libraries</p>
+<p>ControllerPassingModelToView.cshtml</p>
+<pre>@@model WebAppMvcControllerModelViewForm.Models.Log
+...
+@@using (Html.BeginForm()) {
+    @@Html.AntiForgeryToken()
+    @@Html.ValidationSummary(true)
+&lt;fieldset&gt;
+&lt;legend&gt;Log&lt;/legend&gt;
+&lt;div class="editor-label"&gt;
+    @@Html.LabelFor(model =&gt; model.Name)
+&lt;/div&gt;
+&lt;div class="editor-field"&gt;
+    @@Html.EditorFor(model =&gt; model.Name)
+    @@Html.ValidationMessageFor(model =&gt; model.Name)
+&lt;/div&gt;
+&lt;div class="editor-label"&gt;
+    @@Html.LabelFor(model =&gt; model.Date)
+&lt;/div&gt;
+&lt;div class="editor-field"&gt;
+    @@Html.EditorFor(model =&gt; model.Date)
+    @@Html.ValidationMessageFor(model =&gt; model.Date)
+&lt;/div&gt;
+&lt;div class="editor-label"&gt;
+        @@Html.LabelFor(model =&gt; model.Priority)
+    &lt;/div&gt;
+&lt;div class="editor-field"&gt;
+    @@Html.EditorFor(model =&gt; model.Priority)
+    @@Html.ValidationMessageFor(model =&gt; model.Priority)
+&lt;/div&gt;
+&lt;p&gt;&lt;input type="submit" value="Create" /&gt;&lt;/p&gt;
+&lt;/fieldset&gt;
+}
+@@section Scripts {
+    @@Scripts.Render("~/bundles/jqueryval")
+}</pre>
+<p>@@using (Html.BeginForm()) {<br />
+ &lt;form action="/Home/FormScaffoldValidationLabel" method="post"&gt;</p>
+<p>@@Html.AntiForgeryToken()<br />
+ &lt;input name="__RequestVerificationToken" type="hidden" value="token_xyz" /&gt;</p>
+<p>Reference script libraries<br />
+ @@section Scripts { @@Scripts.Render("~/bundles/jqueryval") }</p>
+<pre style="color:red">bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
+    "~/Scripts/jquery.unobtrusive*",
+    "~/Scripts/jquery.validate*"));</pre>
+<hr />
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Log</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Name)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Date)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Date)
+            @Html.ValidationMessageFor(model => model.Date)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Priority)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Priority)
+            @Html.ValidationMessageFor(model => model.Priority)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+<hr />
+<p>This form send one model to Controller (via method="post"), so command (property) ModelState.IsValid verify annotation of Model</p>
+<pre>[HttpPost]
+public ActionResult FormScaffoldAnnotationValidation(Log log) {
+    if (ModelState.IsValid)
+    {
+        ...
+        return RedirectToAction("Index");
+    }
+    return View(log);
+}</pre>
+
+<p>Model class Log update with annotation, need namespace using System.ComponentModel.DataAnnotations;</p>
+<pre>public partial class Log {
+
+    public int Id { get; set; }
+
+    [Required(ErrorMessage = "Name are required.")]
+    public string Name { get; set; }
+
+    public Nullable&lt;system.datetime&gt; Date { get; set; }
+
+    [Range(1, 5, ErrorMessage = "Priority should be between 1 and 5.")]
+    public Nullable&lt;int&gt; Priority { get; set; }
+}</pre>
+<p>When one of fields of Model passed don't be agree with an annotation, 
+    a sequence this flow is return to a View, with messages of errors.<br />
+    The message will be inserts in Helpers especify @@Html.ValidationMessageFor(model => model.Priority)</p>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

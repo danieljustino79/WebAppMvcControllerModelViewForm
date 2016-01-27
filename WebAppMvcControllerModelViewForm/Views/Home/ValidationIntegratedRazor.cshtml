@@ -1,0 +1,135 @@
+﻿@model WebAppMvcControllerModelViewForm.Models.Foo
+@{
+    ViewBag.Title = "Validation integrated with Razor Helper";
+}
+
+<h2>Validation integrated with Razor Helper</h2>
+<p>Namespace System.ComponentModel.DataAnnotations, source: https://msdn.microsoft.com/pt-br/library/system.componentmodel.dataannotations(v=vs.110).aspx</p>
+<ul><li>AssociationAttribute - Specifies that an entity member represents a data relationship, such as a foreign key relationship.</li>
+    <li>BindableTypeAttribute - Specifies whether a type is typically used for binding.</li>
+    <li>CompareAttribute - Provides an attribute that compares two properties.</li>
+    <li>ConcurrencyCheckAttribute - Specifies that a property participates in optimistic concurrency checks.</li>
+    <li>CreditCardAttribute - Specifies that a data field value is a credit card number.</li>
+    <li>CustomValidationAttribute - Specifies a custom validation method that is used to validate a property or class instance.</li>
+    <li>DataTypeAttribute - Specifies the name of an additional type to associate with a data field.</li>
+    <li>DisplayAttribute - Provides a general-purpose attribute that lets you specify localizable strings for types and members of entity partial classes.</li>
+    <li>DisplayColumnAttribute - Specifies the column that is displayed in the referred table as a foreign-key column.</li>
+    <li>DisplayFormatAttribute - Specifies how data fields are displayed and formatted by ASP.NET Dynamic Data.</li>
+    <li>EditableAttribute - Indicates whether a data field is editable.</li>
+    <li>EmailAddressAttribute - Validates an email address.</li>
+    <li>EnumDataTypeAttribute - Enables a .NET Framework enumeration to be mapped to a data column.</li>
+    <li>FileExtensionsAttribute - Validates file name extensions.</li>
+    <li>FilterUIHintAttribute - Represents an attribute that is used to specify the filtering behavior for a column.</li>
+    <li>KeyAttribute - Denotes one or more properties that uniquely identify an entity.</li>
+    <li>MaxLengthAttribute, MinLengthAttribute - Specifies the maximum length of array or string data allowed in a property.</li>
+    <li>MetadataTypeAttribute - Specifies the metadata class to associate with a data model class.</li>
+    <li>PhoneAttribute - Specifies that a data field value is a well-formed phone number using a regular expression for phone numbers.</li>
+    <li>RangeAttribute - Specifies the numeric range constraints for the value of a data field.</li>
+    <li>RegularExpressionAttribute - Specifies that a data field value in ASP.NET Dynamic Data must match the specified regular expression.</li>
+    <li>RequiredAttribute - Specifies that a data field value is required.</li>
+    <li>ScaffoldColumnAttribute - Specifies whether a class or data column uses scaffolding.</li>
+    <li>ScaffoldTableAttribute - Specifies whether a class or data table uses scaffolding.</li>
+    <li>StringLengthAttribute - Specifies the minimum and maximum length of characters that are allowed in a data field.</li>
+    <li>TimestampAttribute - Specifies the data type of the column as a row version.</li>
+    <li>UIHintAttribute - Specifies the template or user control that Dynamic Data uses to display a data field.</li>
+    <li>UrlAttribute - Provides URL validation.</li>
+    <li>ValidationAttribute - Serves as the base class for all validation attributes.</li>
+    <li>ValidationContext - Describes the context in which a validation check is performed.</li>
+    <li>ValidationException - Represents the exception that occurs during validation of a data field when the ValidationAttribute class is used.</li>
+    <li>ValidationResult - Represents a container for the results of a validation request.</li>
+    <li>Validator - Defines a helper class that can be used to validate objects, properties, and methods when it is included in their associated ValidationAttribute attributes.</li></ul>
+
+<p>More used</p>
+<p><b>RequiredAttribute</b> have 3 variations and is integrated with Helper @@Html.ValidationMessageFor(model => model.Id)</p>
+<pre>public class Foo {
+
+    [Required] //The Id field is required.
+    [Required(ErrorMessage="Error in model")]
+    [Required(ErrorMessageResourceType = typeof(ResxModel), ErrorMessageResourceName = "ModelFooIdError")]
+    public int Id { get; set; }
+}</pre>
+
+<hr />
+<p><b>DisplayAttribute</b> have 2 variations and is integrated with Helper @@Html.LabelFor(model => model.Id)</p>
+<pre>public class Foo {
+    [Required]
+    [Display(ErrorMessage="Error in model")]
+    [Display(Name = "ModelFooIdDisplay", ResourceType = typeof(ResxModel))]
+    public int Id { get; set; }
+}</pre>
+
+<hr />
+<p><b>DataTypeAttribute</b> has Currency, Custom, Date, DateTime, Duration, EmailAddress, Html, ImageUrl, MultilineText, Password, PhoneNumber, Text, Time and Url.
+    It may even modify the Helper @@Html.EditorFor()<br />
+    <b>DisplayFormatAttribute</b> representation using the specified format (mask)</p>
+<pre>[DataType(DataType.DateTime)]
+[DisplayFormat(DataFormatString = "{0:dd MMM yyyy HH:mm:ss}")]
+public DateTime DataCreate { get; set; }
+
+[DataType(DataType.Date)]
+[DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
+public DateTime Birthday { get; set; }</pre>
+
+<pre>[DataType(DataType.EmailAddress)]
+public string Email { get; set; }
+
+[DataType(DataType.MultilineText)]
+public string Description { get; set; }</pre>
+
+<p><b>StringLengthAttribute and CompareAttribute</b></p>
+<pre>[DataType(DataType.Password)]
+[StringLength(10, MinimumLength = 4)]
+public string Password { get; set; }
+
+[DataType(DataType.Password)]
+[Compare("Password")]
+public string Repassword { get; set; }</pre>
+<p>CRUD - Create, Read, Update and Delete</p>
+<p>Insert</p>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Id)
+            @Html.EditorFor(model => model.Id)
+            @Html.ValidationMessageFor(model => model.Id)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DataCreate)
+            @Html.EditorFor(model => model.DataCreate)
+            @Html.ValidationMessageFor(model => model.DataCreate)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Birthday)
+            @Html.EditorFor(model => model.Birthday)
+            @Html.ValidationMessageFor(model => model.Birthday)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Email)
+            @Html.EditorFor(model => model.Email)
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Description)
+            @Html.EditorFor(model => model.Description)
+            @Html.ValidationMessageFor(model => model.Description)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Password)
+            @Html.EditorFor(model => model.Password)
+            @Html.ValidationMessageFor(model => model.Password)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Repassword)
+            @Html.EditorFor(model => model.Repassword)
+            @Html.ValidationMessageFor(model => model.Repassword)
+        </div>
+        <p><input type="submit" value="Create" /></p>
+    </fieldset>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

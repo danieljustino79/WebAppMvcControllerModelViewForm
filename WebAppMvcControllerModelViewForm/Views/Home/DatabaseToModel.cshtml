@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "DatabaseToModel";
+}
+
+<h2>Database To Model or Database First (edmx)</h2>
+
+<p>
+    Create one table on the database DataConnections/Database1.mdf/Table/
+    called Log with 3 columns: Id, Name, Date
+</p>
+<img src="~/Images/edmx.png"  style="float:right"/>
+<p>Create in folder Models: ADO.NET Entity Data Model - Model1.edmx<br />
+    <ul><li>Generate from database</li>
+    <li>Database1.mdf - Save entity connection setting in web.config</li>
+    <li>EF version</li>
+    <li>Database objects - Namespace</li>
+    </ul>
+    result: Model1.edmx, Log.cs, Model1.context.cs
+</p>
+
+<p>Model1.edmx - connect Table and Class and is divided in 3 sections:</p>
+<ul><li>SSDL content - StorageModels (Table)</li>
+    <li>CSDL content - ConceptualModels (Class)</li>
+    <li>C-S mapping content</li></ul>
+Table
+<pre>CREATE TABLE [dbo].[Log] (
+    [Id]   INT        IDENTITY (1, 1) NOT NULL,
+    [Name] NCHAR (50) NULL,
+    [Date] DATETIME   NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);</pre>
+Class
+<pre>public partial class Log {
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public Nullable&lt;system.datetime&gt; Date { get; set; }
+}</pre>
+<hr />
+<p>Model1.Context.cs</p>
+<pre>public partial class Database1Entities1 : DbContext {
+    public Database1Entities1() : base("name=Database1Entities1") { }
+    
+    protected override void OnModelCreating(DbModelBuilder modelBuilder) {
+        throw new UnintentionalCodeFirstException();
+    }
+    
+    public DbSet&lt;log&gt; Logs { get; set; }
+}</pre>
+<p>This class inherits of DbContext, in constructor should pass connectionString name, 
+    each model existent should be one DbSet</p>
+<hr />
+<p>Update Table and Model via edmx</p>
+<pre>CREATE TABLE [dbo].[Log] (
+    [Id]   INT        IDENTITY (1, 1) NOT NULL,
+    [Name] NCHAR (50) NULL,
+    [Date] DATETIME   NULL,
+    [Prioriry] INT NULL, 
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);</pre>
+<p>After update a database, click right-button in Model1.edmx (Diagram), option Update Model from Databse...</p>
+<img src="~/Images/Update%20model.png" />
+<p>After this process make Build</p>
+<pre>public partial class Log {
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public Nullable&lt;system.datetime&gt; Date { get; set; }
+    public Nullable&lt;int&gt; Prioriry { get; set; }
+}</pre>

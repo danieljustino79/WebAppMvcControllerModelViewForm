@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "EntityFrameworkModel";
+}
+
+<h2>EntityFramework Model</h2>
+sources: http://www.entityframeworktutorial.net/entity-relationships.aspx<br />
+http://www.entityframeworktutorial.net/code-first/configure-one-to-one-relationship-in-code-first.aspx<br />
+http://code.tutsplus.com/tutorials/sql-for-beginners-part-3-database-relationships--net-8561
+
+<p>Entity framework supports three types of relationships:</p>
+<p><b>One to One Relationship</b> - this kind of relationship is not very common</p>
+<pre>CREATE TABLE [dbo].[Client] (
+    [ClientId] INT        NOT NULL IDENTITY,
+    [Name]     NCHAR (10) NULL,
+    PRIMARY KEY CLUSTERED ([ClientId] ASC)
+);</pre>
+<pre>CREATE TABLE [dbo].[Address] (
+    [ClientId] INT NOT NULL PRIMARY KEY, 
+    [Name] NVARCHAR(50) NULL, 
+    [Number] NCHAR(10) NULL, 
+    CONSTRAINT [FK_Address_Client] FOREIGN KEY ([ClientId]) REFERENCES [Client]([ClientId])
+);</pre>
+<img src="~/Images/relationship-onetoone.png" />
+<pre>public partial class Client {
+    public int ClientId { get; set; }
+    public string Name { get; set; }
+    
+    public virtual Address Address { get; set; }
+}
+
+public partial class Address {
+    public int ClientId { get; set; }
+    public string Name { get; set; }
+    public string Number { get; set; }
+    
+    public virtual Client Client { get; set; }
+}</pre>
+
+<hr />
+<p><b>One to Many Relationship</b></p>
+<pre>CREATE TABLE [dbo].[Client] (
+    [ClientId] INT        IDENTITY (1, 1) NOT NULL,
+    [Name]     NCHAR (10) NULL,
+    [CategoryId] INT NULL, 
+    PRIMARY KEY CLUSTERED ([ClientId] ASC), 
+    CONSTRAINT [FK_Client_Category] FOREIGN KEY ([CategoryId]) REFERENCES [Category]([CategoryId])
+);</pre>
+<pre>CREATE TABLE [dbo].[Category] (
+    [CategoryId] INT        NOT NULL,
+    [Name]       NCHAR (50) NULL,
+    PRIMARY KEY CLUSTERED ([CategoryId] ASC)
+);</pre>
+<img src="~/Images/relationship-onetomany.png" />
+<pre>public partial class Client {
+    public int ClientId { get; set; }
+    public string Name { get; set; }
+    public Nullable&lt;int&gt; CategoryId { get; set; }
+    
+    public virtual Category Category { get; set; }
+}
+    
+public partial class Category {
+    public Category()
+    {
+        this.Clients = new HashSet&lt;client&gt;();
+    }
+    
+    public int CategoryId { get; set; }
+    public string Name { get; set; }
+    
+    public virtual ICollection&lt;client&gt; Clients { get; set; }
+}</pre>
+
+<hr />
+<p><b>Many to Many Relationship</b></p>
+<pre>CREATE TABLE [dbo].[Client] (
+    [ClientId]   INT        IDENTITY (1, 1) NOT NULL,
+    [Name]       NCHAR (10) NULL,
+    [CategoryId] INT        NULL,
+    PRIMARY KEY CLUSTERED ([ClientId] ASC),
+    CONSTRAINT [FK_Client_Category] FOREIGN KEY ([CategoryId]) REFERENCES [dbo].[Category] ([CategoryId])
+);
+
+CREATE TABLE [dbo].[ProjectClient]
+(
+	[ProjectClientId] INT NOT NULL PRIMARY KEY, 
+    [ProjectId] INT NULL, 
+    [ClientId] INT NULL, 
+    CONSTRAINT [FK_ProjectClient_Project] FOREIGN KEY ([ProjectId]) REFERENCES [Project]([ProjectId]), 
+    CONSTRAINT [FK_ProjectClient_Client] FOREIGN KEY ([ClientId]) REFERENCES [Client]([ClientId])
+);
+
+CREATE TABLE [dbo].[Project] (
+	[ProjectId] INT NOT NULL PRIMARY KEY, 
+    [Name] NCHAR(10) NULL, 
+    [Date] DATETIME NULL
+);</pre>
+<img src="~/Images/relationship-manytomany.png" />
+<pre>public partial class Client {
+    public Client() {
+        this.ProjectClients = new HashSet&lt;projectclient&gt;();
+    }
+    
+    public int ClientId { get; set; }
+    public string Name { get; set; }
+    public Nullable&lt;int&gt; CategoryId { get; set; }
+    
+    public virtual ICollection&lt;projectclient&gt; ProjectClients { get; set; }
+}
+
+public partial class ProjectClient {
+    public int ProjectClientId { get; set; }
+    public Nullable&lt;int&gt; ProjectId { get; set; }
+    public Nullable&lt;int&gt; ClientId { get; set; }
+    
+    public virtual Client Client { get; set; }
+    public virtual Project Project { get; set; }
+}
+
+public partial class Project {
+    public Project() {
+        this.ProjectClients = new HashSet&lt;projectclient&gt;();
+    }
+    
+    public int ProjectId { get; set; }
+    public string Name { get; set; }
+    public Nullable&lt;system.datetime&gt; Date { get; set; }
+    
+    public virtual ICollection&lt;projectclient&gt; ProjectClients { get; set; }
+}</pre>

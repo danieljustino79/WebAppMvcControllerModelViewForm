@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f506375e69c44e849ea1544410300faf" Name="Diagram1">
+        <EntityTypeShape EntityType="Database1ModelManyToMany.Client" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Database1ModelManyToMany.Project" Width="1.5" PointX="6.125" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Database1ModelManyToMany.ProjectClient" Width="1.5" PointX="3.375" PointY="0.875" IsExpanded="true" />
+        <AssociationConnector Association="Database1ModelManyToMany.FK_ProjectClient_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="Database1ModelManyToMany.FK_ProjectClient_Project" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
