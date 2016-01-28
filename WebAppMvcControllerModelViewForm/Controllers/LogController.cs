@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
-
 using WebAppMvcControllerModelViewForm.Models;
 
 namespace WebAppMvcControllerModelViewForm.Controllers
 {
     public class LogController : Controller
     {
-        //
-        // GET: /Log/
+        Database1Entities1 db = new Database1Entities1();
 
         public ActionResult Index()
         {
@@ -26,30 +26,93 @@ namespace WebAppMvcControllerModelViewForm.Controllers
             return View(list);
         }
 
-        //public ActionResult Edit(int id = 0)
-        //{
-        //    Log movie = db.Movies.Find(id);
-        //    if (movie == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(movie);
-        //}
+        public ActionResult Create()
+        {
+            return View();
+        }
 
-        //
-        // POST: /Movies/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Log log)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Logs.Add(log);
+                db.SaveChanges();
+                return RedirectToAction("Index/?add=ok");
+            }
+            return View(log);
+        }
 
-        //[HttpPost]
-        //public ActionResult Edit(Movie movie)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(movie).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(movie);
-        //}
+        public ActionResult List()
+        {
+            List<Log> list = new List<Log>();
+            list = db.Logs.ToList();
+
+            return View(list);
+        }
+
+        public ActionResult Edit(int id = 0)
+        {
+            Log log = db.Logs.Find(id);
+            if (log == null)
+            {
+                return HttpNotFound();
+            }
+            return View(log);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Log log)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(log).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(log);
+        }
+
+
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Log log = db.Logs.Find(id);
+            if (log == null)
+            {
+                return HttpNotFound();
+            }
+            return View(log);
+        }
+
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Log log = db.Logs.Find(id);
+            if (log == null)
+            {
+                return HttpNotFound();
+            }
+            return View(log);
+        }
+
+        // POST: /Movies/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Log log = db.Logs.Find(id);
+            db.Logs.Remove(log);
+            db.SaveChanges();
+            return RedirectToAction("Index/?del=ok");
+        }
 
     }
 }

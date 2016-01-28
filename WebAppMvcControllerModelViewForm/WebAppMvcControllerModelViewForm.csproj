@@ -481,6 +481,11 @@
     <Content Include="Views\Home\FormScaffoldValidationLabel.cshtml" />
     <Content Include="Views\Home\EntityFrameworkModel.cshtml" />
     <Content Include="Views\Home\ValidationIntegratedRazor.cshtml" />
+    <Content Include="Views\Log\Create.cshtml" />
+    <Content Include="Views\Log\List.cshtml" />
+    <Content Include="Views\Log\Edit.cshtml" />
+    <Content Include="Views\Log\Details.cshtml" />
+    <Content Include="Views\Log\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
